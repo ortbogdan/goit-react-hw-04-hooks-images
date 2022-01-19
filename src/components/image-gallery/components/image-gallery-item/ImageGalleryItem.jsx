@@ -1,8 +1,8 @@
 import React from "react";
-
+import { GalleryItem } from "./ImageGalleyItem.styled";
 export const ImageGalleryItem = ({imageUrl, tags}) => {
-    return (<li className="gallery-item">
+    return (<GalleryItem className="gallery-item">
   <img src={imageUrl} alt={tags} />
-</li>)
+</GalleryItem>)
 
 }
