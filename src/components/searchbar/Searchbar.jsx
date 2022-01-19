@@ -1,14 +1,14 @@
 import React from "react";
-
+import { SearchbarWrapper, SearchForm, SearchFormButton, SearchFormButtonLabel, SearchFormInput } from "./Searchbar.styled";
 
 export const Searchbar=({onSubmit}) => {
 
- return (<header className="searchbar">
-  <form className="form" onSubmit={onSubmit}>
-    <button type="submit" className="button" >
-      <span className="button-label">Search</span>
-    </button>
-    <input
+ return (<SearchbarWrapper className="searchbar">
+  <SearchForm className="form" onSubmit={onSubmit}>
+     <SearchFormButton type="submit" className="button" >
+      <SearchFormButtonLabel className="button-label"></SearchFormButtonLabel>
+    </SearchFormButton>
+    <SearchFormInput
       className="input"
       type="text"
       autoComplete="off"
@@ -16,7 +16,7 @@ export const Searchbar=({onSubmit}) => {
       placeholder="Search images and photos"
       name="filter" 
     />
-  </form>
-</header>)
+  </SearchForm>
+</SearchbarWrapper>)
     
 }
