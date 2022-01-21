@@ -6,9 +6,8 @@ export class Searchbar extends Component  {
     searchImg: ''
   }
   handleChange = (event) => {
-    const searchedImg = event.currentTarget.value;
-    const normalizeSearchedImg = searchedImg.trim().toLowerCase();
-    this.setState({ searchImg: normalizeSearchedImg });
+    const searchedImg = event.currentTarget.value.trim();
+    this.setState({ searchImg: searchedImg.toLowerCase() });
   }
   handleSabmit = (event) => {
     event.preventDefault();
@@ -16,7 +15,6 @@ export class Searchbar extends Component  {
       return alert('Enter the name of the pictures!');
     }
     this.props.onSubmitForm(this.state.searchImg);
-    this.setState({searchImg: ''})
   }
   render() {
     return (<SearchbarWrapper className="searchbar">
