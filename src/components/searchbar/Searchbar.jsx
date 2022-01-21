@@ -15,7 +15,7 @@ export class Searchbar extends Component  {
   handleSabmit = (event) => {
     event.preventDefault();
     if (this.state.searchImg.trim() === '') {
-      return toast('Enter the name of the pictures!');
+      return toast('Enter a name of the pictures!');
     }
     this.props.onSubmitForm(this.state.searchImg);
   }

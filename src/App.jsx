@@ -33,15 +33,14 @@ handleFormSabmit = (filter) => {
     if (filter === this.state.filter) {
       return;
     }
-    this.setState({ filter, page: 1, images: [] });
+    this.setState({ filter, page: 1, images: [], totalHits: 0 });
   }
 fetchImages = async () => {
         const { images, page, filter } = this.state;
         try {   
           this.setState({ loading: true, error: null })
-          // const response = await axios.get(`/api/?q=${filter}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`);
-          const data = await Api(filter, page);
-          const { hits, total, totalHits } = data;
+          const { hits, total, totalHits } = await Api(filter, page);
+          
           if (total) {
             return this.setState({ images: [...images, ...hits], totalHits: totalHits, page: page+1 });
                 }
