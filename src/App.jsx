@@ -1,7 +1,7 @@
 
 import React, { Component } from "react";
 import { Container } from "./App.styled";
-import {Searchbar, ImageGallery, Button} from './components/index'
+import {Searchbar, ImageGallery, Button, Loader, Modal} from './components/index'
 import axios from "axios";
 const API_KEY = '24332331-fceed411956b076254def86c5';
 axios.defaults.baseURL = 'https://pixabay.com';
@@ -11,42 +11,60 @@ export class App extends Component {
     filter: '',
     page: 1,
     loading: false,
-    totalHits: 0
-}
+    totalHits: 0, 
+    error: null, 
+    showModal: false,
+    imageUrl: ''
+  }
 async componentDidUpdate(_, prevState) {
-        const { filter } = this.state;
-        if (prevState.filter !== filter) {
+  const { filter } = this.state;
+  if (prevState.filter !== filter) {
             this.fetchImages();
-        }
-    }
+  }
+}
+toggleModal = () => {
+    this.setState(({showModal}) => ({showModal: !showModal}))
+  }  
 handleFormSabmit = (filter) => {
-    this.setState({ filter, images: [], page: 1 });
+    if (filter === this.state.filter) {
+      return;
+    }
+    this.setState({ filter, page: 1, images: [] });
   }
 fetchImages = async () => {
         const { images, page, filter } = this.state;
         try {   
-                this.setState({ loading: true, error: null })
-                const response = await axios.get(`/api/?q=${filter}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`);
-                const {hits, total, totalHits} = response.data
-                if (total) {
-                  return this.setState({ images: [...images, ...hits], totalHits: totalHits, page: page+1 });
+          this.setState({ loading: true, error: null })
+          const response = await axios.get(`/api/?q=${filter}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`);
+          const { hits, total, totalHits } = response.data;
+          console.log(response.data)
+          if (total) {
+            return this.setState({ images: [...images, ...hits], totalHits: totalHits, page: page+1 });
                 }
-                return this.setState({error: new Error(`Oops...No pictures on your request - ${filter}`)});
+          this.setState({error: new Error(`Oops...No pictures on your request - ${filter}`)});
             } catch (error) {
-                this.setState({error})
+          this.setState({ error });
             } finally {
                 this.setState({ loading: false })
             }
 }
+  takeImageUrl = url => {
+    this.setState({ imageUrl: url })
+    console.log(this.state.imageUrl)
+    this.toggleModal()
+  }
   render() {
-    const { error, images, loading, totalHits } = this.state;
+    const { error, images, loading, totalHits, showModal, imageUrl } = this.state;
     return (
       <Container>
+
         <Searchbar onSubmitForm={this.handleFormSabmit} />
-        {error && <h2>{error.message}</h2>}
-        {images.length > 0 && <ImageGallery images={images}></ImageGallery>}
-        {loading && <h2>Download...</h2>}
+        {showModal && <Modal onClose={this.toggleModal}><img src={imageUrl} alt="" /></Modal>}
+        {error && <p>{error.message}</p>}
+        {images.length > 0 && <ImageGallery images={images} onModal={this.takeImageUrl}></ImageGallery>}
+        {loading && <Loader/>}
         {totalHits !== images.length && <Button onClick={this.fetchImages}>Load more</Button>}
+        
       </Container>);}
  
 }
