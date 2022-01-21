@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { SearchbarWrapper, SearchForm, SearchFormButton, SearchFormInput } from "./Searchbar.styled";
 import { BiSearchAlt2 } from "react-icons/bi"
 import { ToastContainer, toast } from 'react-toastify';
+import PropTypes from "prop-types";
 import 'react-toastify/dist/ReactToastify.css';
 export class Searchbar extends Component  {
   state = {
@@ -36,4 +37,7 @@ export class Searchbar extends Component  {
       <ToastContainer limit={1} autoClose={3000}/>
     </SearchbarWrapper>)
   }
+}
+Searchbar.propTypes = {
+  onSubmitForm: PropTypes.func.isRequired
 }
