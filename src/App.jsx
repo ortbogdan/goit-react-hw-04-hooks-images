@@ -3,9 +3,7 @@ import React, { Component } from "react";
 import { Container } from "./App.styled";
 import { Searchbar, ImageGallery, Button, Loader, Modal } from './components/index'
 import { Api } from "./services/api";
-// import axios from "axios";
-// const API_KEY = '24332331-fceed411956b076254def86c5';
-// axios.defaults.baseURL = 'https://pixabay.com';
+import * as Scroll from 'react-scroll';
 
 export class App extends Component {
   state = {
@@ -18,13 +16,11 @@ export class App extends Component {
     showModal: false,
     imageUrl: ''
   }
-async componentDidUpdate(_, prevState) {
-  const { filter } = this.state;
-  if (prevState.filter !== filter) {
-  this.fetchImages();
-  }
-  const height = document.body.scrollHeight
-  window.scrollTo(0, height)
+  async componentDidUpdate(_, prevState) {
+    const { filter } = this.state;
+    if (prevState.filter !== filter) {
+      this.fetchImages();
+    }
 }
 toggleModal = () => {
     this.setState(({showModal}) => ({showModal: !showModal}))
@@ -37,19 +33,20 @@ handleFormSabmit = (filter) => {
   }
 fetchImages = async () => {
         const { images, page, filter } = this.state;
-        try {   
-          this.setState({ loading: true, error: null })
-          const { hits, total, totalHits } = await Api(filter, page);
+  try {
+    this.setState({ loading: true, error: null })
+    const { hits, total, totalHits } = await Api(filter, page);
           
-          if (total) {
-            return this.setState({ images: [...images, ...hits], totalHits: totalHits, page: page+1 });
-                }
-          this.setState({error: new Error(`Oops...No pictures on your request - ${filter}`)});
-            } catch (error) {
-          this.setState({ error });
-            } finally {
-          this.setState({ loading: false })
-            }
+    if (total) {
+      return this.setState({ images: [...images, ...hits], totalHits: totalHits, page: page + 1 });
+    }
+    this.setState({ error: new Error(`Oops...No pictures on your request - ${filter}`) });
+  } catch (error) {
+    this.setState({ error });
+  } finally {
+    Scroll.animateScroll.scrollToBottom({duration: 2000});
+    this.setState({ loading: false })
+  }
 }
   takeImageUrl = url => {
     this.setState({ imageUrl: url })
@@ -65,7 +62,7 @@ fetchImages = async () => {
         {error && <p>{error.message}</p>}
         {images.length > 0 && <ImageGallery images={images} onModal={this.takeImageUrl}></ImageGallery>}
         {loading && <Loader/>}
-        {totalHits !== images.length && <Button onClick={this.fetchImages}>Load more</Button>}
+        {totalHits !== images.length && <Button name="more" delay={1000} onClick={this.fetchImages}>Load more</Button>}
       </Container>);}
  
 }
