@@ -21,7 +21,9 @@ export class App extends Component {
     if (prevState.filter !== filter) {
       this.fetchImages();
     }
-}
+   Scroll.animateScroll.scrollToBottom({spyThrottle: 500, smooth: 'easeInOutQuint'});
+
+  }
 toggleModal = () => {
     this.setState(({showModal}) => ({showModal: !showModal}))
 }  
@@ -36,15 +38,16 @@ fetchImages = async () => {
   try {
     this.setState({ loading: true, error: null })
     const { hits, total, totalHits } = await Api(filter, page);
-          
+      
     if (total) {
+      
       return this.setState({ images: [...images, ...hits], totalHits: totalHits, page: page + 1 });
     }
     this.setState({ error: new Error(`Oops...No pictures on your request - ${filter}`) });
   } catch (error) {
     this.setState({ error });
   } finally {
-    Scroll.animateScroll.scrollToBottom({duration: 2000});
+    
     this.setState({ loading: false })
   }
 }
@@ -60,9 +63,9 @@ fetchImages = async () => {
         <Searchbar onSubmitForm={this.handleFormSabmit} />
         {showModal && <Modal onClose={this.toggleModal}><img src={imageUrl} alt="" /></Modal>}
         {error && <p>{error.message}</p>}
-        {images.length > 0 && <ImageGallery images={images} onModal={this.takeImageUrl}></ImageGallery>}
+        {images.length > 0 && <ImageGallery images={images} onModal={this.takeImageUrl}/>}
         {loading && <Loader/>}
-        {totalHits !== images.length && <Button name="more" delay={1000} onClick={this.fetchImages}>Load more</Button>}
+        {totalHits !== images.length && <Button onClick={this.fetchImages}>Load more</Button>}
       </Container>);}
  
 }
