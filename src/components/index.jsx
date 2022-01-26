@@ -1,6 +1,6 @@
-import { ImageGallery } from "./image-gallery/ImageGallery";
-import { Searchbar } from "./searchbar/Searchbar";
-import { Button } from "./button/Button";
-import { Loader } from "./loader/Loader";
-import { Modal } from "./modal/Modal";
+import { ImageGallery } from "./ImageGallery/ImageGallery";
+import { Searchbar } from "./Searchbar/Searchbar";
+import { Button } from "./Button/Button";
+import { Loader } from "./Loader/Loader";
+import { Modal } from "./Modal/Modal";
 export {ImageGallery, Searchbar, Button, Loader, Modal}
