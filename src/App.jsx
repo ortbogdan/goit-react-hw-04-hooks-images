@@ -21,8 +21,6 @@ export class App extends Component {
     if (prevState.filter !== filter) {
       this.fetchImages();
     }
-   Scroll.animateScroll.scrollToBottom({spyThrottle: 500, smooth: 'easeInOutQuint'});
-
   }
 toggleModal = () => {
     this.setState(({showModal}) => ({showModal: !showModal}))
@@ -47,8 +45,9 @@ fetchImages = async () => {
   } catch (error) {
     this.setState({ error });
   } finally {
-    
     this.setState({ loading: false })
+    setTimeout(()=>{Scroll.animateScroll.scrollToBottom();}, 500)
+    
   }
 }
   takeImageUrl = url => {
